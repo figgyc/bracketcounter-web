@@ -11,4 +11,3 @@ FROM nginx:alpine
 WORKDIR /var/www/html
 COPY . .
 COPY --from=builder /usr/src/app/client.js ./
-CMD ["./app"]  

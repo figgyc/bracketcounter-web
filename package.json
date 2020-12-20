@@ -1,0 +1,28 @@
+{
+  "name": "bracketcounter-web",
+  "version": "1.0.0",
+  "description": "Bracketcounter web client",
+  "dependencies": {
+    "json5": "^2.1.3",
+    "ws": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/google.visualization": "0.0.52",
+    "@types/json5": "0.0.30",
+    "@types/ws": "^4.0.1",
+    "typescript": "^3.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/figgyc/bracketcounter-web.git"
+  },
+  "keywords": [
+    "bfb"
+  ],
+  "author": "figgyc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/figgyc/bracketcounter-web/issues"
+  },
+  "homepage": "https://github.com/figgyc/bracketcounter-web#readme"
+}

@@ -8,6 +8,6 @@ COPY tsconfig.json ./
 RUN npx tsc
 
 FROM nginx:alpine 
-WORKDIR /var/www/html
+WORKDIR /usr/share/nginx/html
 COPY . .
 COPY --from=builder /usr/src/app/client.js ./

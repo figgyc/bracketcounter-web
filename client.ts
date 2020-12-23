@@ -58,7 +58,8 @@ function init() {
     let translations: { [contestant: string]: string } = {};
     let colors: { [contestant: string]: string } = {};
 
-    
+    let password = localStorage.getItem("access") ?? "default";
+    socket?.send(password);
 
     socket!.addEventListener('error', function(event) {
         console.log(event)

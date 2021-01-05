@@ -61,6 +61,7 @@ function init() {
     socket!.addEventListener('open', function() {
         let password = localStorage.getItem("access") ?? "default";
         socket?.send(password);
+        socket?.send("default"); // as a backup
     })
     
 

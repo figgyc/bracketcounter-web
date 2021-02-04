@@ -48,7 +48,7 @@ function init() {
     // Create WebSocket connection.
     let socket: WebSocket | null = null;
     try {
-    socket = new WebSocket('wss://'+ window.location.hostname +'/socket');
+        socket = new WebSocket('ws' + (window.location.protocol == "https:" ? "s" : "") + '://' + window.location.hostname + '/socket');
     } catch(e) {
         console.log(e)
         statusElement.textContent = "Bracketcounter is currently unavaliable. This is probably because the voting period for the last video is done. Please come back when a new video is released!"
@@ -93,6 +93,14 @@ function init() {
             }, {
                 type: 'string',
                 role: 'annotation'
+            }, {
+                id: 'i0',
+                type: 'number',
+                role: 'interval'
+            }, {
+                id: 'i1',
+                type: 'number',
+                role: 'interval'
             }]
         ];
         let sortedKeys = Object.keys(ob.votes).sort(function(a, b) {
@@ -101,7 +109,8 @@ function init() {
         for (const letter of sortedKeys) {
             let percent = (ob.votes[letter] / ob.total * 100).toFixed(10);
             let text = translations[letter] + ": " + ob.votes[letter] + " (" + percent.substring(0,4) + "%)";
-            table.push([translations[letter], ob.votes[letter], colors[letter], text]);
+            let interval = 300;
+            table.push([translations[letter], ob.votes[letter], 'color: '+colors[letter]+'; stroke-color: #9b9b9b', text, ob.votes[letter]+interval, ob.votes[letter]-interval]);
             discordPostable += translations[letter] + ' '.repeat(Math.max(18 - translations[letter].length, 1)) + ob.votes[letter] + ' '.repeat(6 - ob.votes[letter].toString().length) + '[' + percent.substring(0,4) + '%]\n';
             let isGreen = (letter == sortedKeys[0])
             let isRed = (letter == sortedKeys[sortedKeys.length-1])
@@ -137,6 +146,7 @@ Avg Votes Per Char  ${status.validVotes / sortedKeys.length}
 \`\`\``;
         postableElement.textContent = discordPostable;
         wikiaElement.textContent = wikiaPostable;
+
         chart.draw(data, {
             //height: 400,
             backgroundColor: 'transparent',
@@ -153,6 +163,9 @@ Avg Votes Per Char  ${status.validVotes / sortedKeys.length}
                 textPosition: 'in',
                 ticks: customTicks
             },
+            tooltip : {
+                trigger: 'none'
+            },
             vAxis: {
                 textPosition: 'none'
             },
@@ -164,6 +177,13 @@ Avg Votes Per Char  ${status.validVotes / sortedKeys.length}
                 top: 0,
                 width: '100%',
                 height: '100%'
+            },
+            // @ts-ignore TS2345
+            intervals: { 'style': 'bar', 'lineWidth':2, 'barWidth': 0.9 },
+            // @ts-ignore TS2345
+            interval: {
+                'i0': { 'style': 'box', color: '#9b9b9b'},
+                'i1': { 'style': 'bar', color: '#9b9b9b'}
             },
             fontName: 'Roboto'
         });

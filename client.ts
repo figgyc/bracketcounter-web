@@ -109,7 +109,7 @@ function init() {
         for (const letter of sortedKeys) {
             let percent = (ob.votes[letter] / ob.total * 100).toFixed(10);
             let text = translations[letter] + ": " + ob.votes[letter] + " (" + percent.substring(0,4) + "%)";
-            let interval = 300;
+            let interval = ob.votes[letter] * 0.03;
             table.push([translations[letter], ob.votes[letter], 'color: '+colors[letter]+'; stroke-color: #9b9b9b', text, ob.votes[letter]+interval, ob.votes[letter]-interval]);
             discordPostable += translations[letter] + ' '.repeat(Math.max(18 - translations[letter].length, 1)) + ob.votes[letter] + ' '.repeat(6 - ob.votes[letter].toString().length) + '[' + percent.substring(0,4) + '%]\n';
             let isGreen = (letter == sortedKeys[0])

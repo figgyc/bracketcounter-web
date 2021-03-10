@@ -19,6 +19,9 @@
   "keywords": [
     "bfb"
   ],
+  "scripts": {
+    "build": "tsc"
+  },
   "author": "figgyc",
   "license": "MIT",
   "bugs": {

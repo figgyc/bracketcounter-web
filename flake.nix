@@ -9,18 +9,18 @@
     in {
 
       overlay = final: prev: {
-        bracketcounter = prev.pkgs.callPackage ./. { src = self; };
+        bracketcounter-web = prev.pkgs.callPackage ./. { src = self; };
       };
 
       packages = forAllSystems (system: {
-        bracketcounter = (import nixpkgs {
+        bracketcounter-web = (import nixpkgs {
           inherit system;
           overlays = [ self.overlay ];
-        }).bracketcounter;
+        }).bracketcounter-web;
       });
 
       defaultPackage =
-        forAllSystems (system: self.packages.${system}.bracketcounter);
+        forAllSystems (system: self.packages.${system}.bracketcounter-web);
 
       checks =
         forAllSystems (system: { build = self.defaultPackage.${system}; });

@@ -1,29 +1,31 @@
 {
-  inputs.nixpkgs.url = "nixpkgs/nixos-20.09";
+  description = "YouTube comment counter web service (also install bracketcounter)";
 
-  outputs = { self, nixpkgs }:
+  inputs.flake-utils.url = "github:numtide/flake-utils";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs";
+  inputs.node2nix.url = "github:svanderburg/node2nix";
+  inputs.node2nix.flake = false;
 
-    let
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system);
-      systems = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" ];
-    in {
-
-      overlay = final: prev: {
-        bracketcounter-web = prev.pkgs.callPackage ./. { src = self; };
-      };
-
-      packages = forAllSystems (system: {
-        bracketcounter-web = (import nixpkgs {
+  outputs = { self, nixpkgs, flake-utils, node2nix }:
+    {
+      # Nixpkgs overlay providing the application
+      overlay =
+        (final: prev: {
+          # The application
+          bracketcounter-web = prev.pkgs.callPackage ./. {
+            src = self;
+            node2nix = (prev.pkgs.callPackage node2nix {}).package;
+          };
+        });
+    } // (flake-utils.lib.eachDefaultSystem (system:
+      let
+        pkgs = import nixpkgs {
           inherit system;
           overlays = [ self.overlay ];
-        }).bracketcounter-web;
-      });
-
-      defaultPackage =
-        forAllSystems (system: self.packages.${system}.bracketcounter-web);
-
-      checks =
-        forAllSystems (system: { build = self.defaultPackage.${system}; });
-
-    };
+        };
+      in
+        rec {
+          packages.bracketcounter-web = pkgs.bracketcounter-web;
+          defaultPackage = pkgs.bracketcounter-web;
+        }));
 }

@@ -12,7 +12,7 @@ let
   nodeVersion = builtins.elemAt (lib.versions.splitVersion nodejs.version) 0;
   node2nixDrv = dev: runCommandNoCC "node2nix" {} ''
     mkdir $out
-    ${node2nix}/bin/node2nix \
+    ${node2nix}/lib/node_modules/node2nix/bin/node2nix.js \
       ${lib.optionalString dev "--development"} \
       --input ${src}/package.json \
       --lock ${src}/package-lock.json \

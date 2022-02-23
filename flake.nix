@@ -10,9 +10,14 @@
       overlay =
         (final: prev: {
           # The application
-          bracketcounter-web = prev.pkgs.mkYarnPackage {
+          bracketcounter-web = let
+            yarn-run = "yarn run --offline --ignore-scripts --ignore-engines --";
+          in prev.pkgs.mkYarnPackage {
             src = ./.;
             name = "bracketcounter-web";
+            postBuild = ''
+              ${yarn-run} tsc
+            '';
           };
         });
     } // (flake-utils.lib.eachDefaultSystem (system:

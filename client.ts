@@ -132,7 +132,8 @@ function init() {
         let hoursLeft = Math.floor(minutesLeft / 60);
         let onlyMinsLeft = Math.floor(minutesLeft % 60);
         let secsLeft = Math.floor(((minutesLeft % 60) * 60) % 60);
-        let statusString = `${status.done ? "" : "🕒Recounting"} Video ID: ${status.id} Comments read: ${status.comments} Votes: ${status.validVotes} Last update: ${updateDate.toLocaleTimeString()} ${config.deadlineHours == 0 ? "" : `(${hoursLeft}h ${onlyMinsLeft}m ${secsLeft}s left`)}`;
+        let timeString = `(${hoursLeft}h ${onlyMinsLeft}m ${secsLeft}s left`;
+        let statusString = `${status.done ? "" : "🕒Recounting"} Video ID: ${status.id} Comments read: ${status.comments} Votes: ${status.validVotes} Last update: ${updateDate.toLocaleTimeString()} ${config.deadlineHours == 0 ? "" : timeString)}`;
         statusElement.innerText = statusString;
         discordPostable += `/************************/
 Comments            ${status.comments}

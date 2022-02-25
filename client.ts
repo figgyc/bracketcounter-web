@@ -63,7 +63,7 @@ function init() {
         socket?.send(password);
         socket?.send("default"); // as a backup
     })
-    
+
 
     socket!.addEventListener('error', function(event) {
         console.log(event)
@@ -123,7 +123,7 @@ function init() {
 |{{Spoilerdiv|[[${config.contestants[letter][0]}]]}}
 |${colorPrefix}${numberWithCommas(ob.votes[letter])}${colorSuffix}
 |${colorPrefix}${percent2}%${colorSuffix}`;
-        
+
         }
         let data = google.visualization.arrayToDataTable(table);
         let updateDate = new Date(status.updateDate);
@@ -132,7 +132,7 @@ function init() {
         let hoursLeft = Math.floor(minutesLeft / 60);
         let onlyMinsLeft = Math.floor(minutesLeft % 60);
         let secsLeft = Math.floor(((minutesLeft % 60) * 60) % 60);
-        let statusString = `${status.done ? "" : "🕒Recounting"} Video ID: ${status.id} Comments read: ${status.comments} Votes: ${status.validVotes} Last update: ${updateDate.toLocaleTimeString()} (${hoursLeft}h ${onlyMinsLeft}m ${secsLeft}s left)`;
+        let statusString = `${status.done ? "" : "🕒Recounting"} Video ID: ${status.id} Comments read: ${status.comments} Votes: ${status.validVotes} Last update: ${updateDate.toLocaleTimeString()} ${config.deadlineHours == 0 ? "" : `(${hoursLeft}h ${onlyMinsLeft}m ${secsLeft}s left`)}`;
         statusElement.innerText = statusString;
         discordPostable += `/************************/
 Comments            ${status.comments}

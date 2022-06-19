@@ -38,13 +38,13 @@ for (let i = 0; i < 60; i++) {
 const statusElement: HTMLDivElement = <HTMLDivElement> document.querySelector("#status")!;
 const postableElement: HTMLTextAreaElement = <HTMLTextAreaElement> document.querySelector("#postable")!;
 const wikiaElement: HTMLDivElement = <HTMLDivElement> document.querySelector("#wikiapostable")!;
-const chart = new google.visualization.BarChart(document.getElementById('graph')!);
 
 let socket: WebSocket | null = null;
 let retries = 0;
 const errorMessage = "Sorry, the connection to the Bracketcounter service has failed. Try reloading the page or check that voting has not ended yet."
 
 function init() {
+    const chart = new google.visualization.BarChart(document.getElementById('graph')!);
     if (socket != null && socket.readyState == 1 || retries > 5) return;
     if (socket != null ) socket.close(3001, "Reloading"); // to ensure no multiple connections
     retries ++;

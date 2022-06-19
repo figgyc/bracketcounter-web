@@ -1,5 +1,4 @@
 // @ts-ignore
-let initialized = false;
 
 google.charts.load('current', {
     'packages': ['corechart']
@@ -36,9 +35,13 @@ for (let i = 0; i < 60; i++) {
     customTicks.push(921*i);
 }
 
+let socket: WebSocket | null = null;
+let retries = 0;
+const errorMessage = "Sorry, the connection to the Bracketcounter service has failed. Try reloading the page or check that voting has not ended yet."
+
 function init() {
-    if (initialized) return
-    initialized = true // dont run twice
+    if (socket !== null && socket.readyState == 1 || retries > 5) return;
+    retries ++;
     const statusElement: HTMLDivElement = <HTMLDivElement> document.querySelector("#status")!;
     const postableElement: HTMLTextAreaElement = <HTMLTextAreaElement> document.querySelector("#postable")!;
     const wikiaElement: HTMLDivElement = <HTMLDivElement> document.querySelector("#wikiapostable")!;
@@ -46,12 +49,11 @@ function init() {
 
 
     // Create WebSocket connection.
-    let socket: WebSocket | null = null;
     try {
         socket = new WebSocket('ws' + (window.location.protocol == "https:" ? "s" : "") + '://' + window.location.hostname + '/socket');
     } catch(e) {
         console.log(e)
-        statusElement.textContent = "Bracketcounter is currently unavaliable. This is probably because the voting period for the last video is done. Please come back when a new video is released!"
+        statusElement.textContent = errorMessage
         statusElement.style.color = "yellow"
     }
 
@@ -67,12 +69,16 @@ function init() {
 
     socket!.addEventListener('error', function(event) {
         console.log(event)
-        statusElement.textContent = "Bracketcounter is currently unavaliable. This is probably because the voting period for the last video is done. Please come back when a new video is released!"
+        statusElement.textContent = errorMessage
         statusElement.style.color = "yellow"
+        init()
     })
+
+    socket!.addEventListener('close', init);
 
     // Listen for messages
     socket!.addEventListener('message', function(event) {
+        retries = 0;
         let ob = JSON.parse(event.data);
         let status = ob.status;
         let config = ob.config;

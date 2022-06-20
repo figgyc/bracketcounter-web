@@ -149,7 +149,6 @@ function init() {
         discordPostable += `/************************/
 Comments            ${status.comments}
 Votes               ${status.validVotes}
-Multi Voters        ${status.multiVoters}
 /************************/
 Avg Votes Per Char  ${status.validVotes / sortedKeys.length}
 #1st-#2nd Margin    ${ob.votes[sortedKeys[0]] - ob.votes[sortedKeys[1]]} [${(ob.votes[sortedKeys[1]] / ob.votes[sortedKeys[0]] * 100).toFixed(1)}%]
@@ -169,10 +168,10 @@ Avg Votes Per Char  ${status.validVotes / sortedKeys.length}
             // accurate bar widths
             hAxis: {
                 viewWindow: {
-                    max: ob.votes[sortedKeys[0]] * 1.3,
+                    max: ob.votes[sortedKeys[0]] * 1.1,
                     min: 0
                 },
-                textPosition: 'in',
+                textPosition: 'out',
                 ticks: customTicks
             },
             tooltip : {
